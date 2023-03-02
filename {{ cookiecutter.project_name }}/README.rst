@@ -14,7 +14,7 @@ We use Docker in this project. Build it as follows::
 
 And up the service::
 
-  $ docker compose up
+  $ docker compose up web
 
 Optionally, install pre-commit hooks (isort, black, flake8, mypy):
 
@@ -38,3 +38,13 @@ If you want to upgrade all package versions, use pip-compile:
 If you want to selectively upgrade a package version (e.g. fastapi):
 
   $ docker compose run --rm web pip-compile -P fastapi requirements/base.in
+
+
+Updating the project's cruft
+----------------------------
+
+This project was generated from https://github.com/nens/cookiecutter-python-app-template.
+Any update done in the template can be imported into this repo using cruft (https://cruft.github.io/).
+
+  $ pip install cruft
+  $ cruft update

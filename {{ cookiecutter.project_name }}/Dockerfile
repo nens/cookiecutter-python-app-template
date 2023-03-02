@@ -15,11 +15,7 @@ RUN apt-get update && apt-get install -y \
   && rm -rf /var/lib/apt/lists/*
 
 # These handy scripts come from https://github.com/tiangolo/uvicorn-gunicorn-docker
-COPY ./scripts/start.sh /start.sh
-RUN chmod +x /start.sh
-COPY ./scripts/gunicorn_conf.py /gunicorn_conf.py
-COPY ./scripts/start-reload.sh /start-reload.sh
-RUN chmod +x /start-reload.sh
+ADD scripts /scripts
 
 # Create a nens user and group, with IDs matching those of the developer.
 # The default values can be overridden at build-time via:
@@ -33,9 +29,9 @@ ARG uid=1000
 ARG gid=1000
 RUN groupadd -g $gid nens && useradd -lm -u $uid -g $gid nens
 
-COPY requirements /app/
 RUN pip install -U pip pip-tools setuptools wheel --no-cache-dir
-RUN pip install --no-cache-dir -r /app/requirements/base.txt -r /app/requirements/dev.txt
+ADD requirements /requirements
+RUN pip install --no-cache-dir -r /requirements/base.txt -r /requirements/dev.txt -e .
 
 WORKDIR /app
 USER nens:nens
@@ -45,4 +41,4 @@ USER nens:nens
 # For the best development experience, live auto-reload is indispensable.
 # https://github.com/tiangolo/uvicorn-gunicorn-fastapi-docker#development-live-reload
 # https://www.uvicorn.org/#running-with-gunicorn
-CMD ["/start-reload.sh"]
+CMD ["/scripts/start-reload.sh"]

@@ -25,7 +25,7 @@ services:
     build:
       context: .
     image: {{ cookiecutter.package_name }}/web:latest
-    command: [ "./scripts/wait-for-postgres.sh", "./scripts/start-reload.sh" ]
+    command: [ "/scripts/wait-for-postgres.sh", "/scripts/start-reload.sh" ]
     depends_on:
       - db
     environment:

@@ -8,8 +8,7 @@ on:
   pull_request:
 
 jobs:
-  TestLinux:
-    name: Linux, Python
+  Test:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,7 +28,7 @@ jobs:
           context: .
           cache-from: type=gha
           cache-to: type=gha,mode=min
-          
+
       - name: Unittests
         run: docker-compose run --no-deps web pytest -p no:cacheprovider src
       
@@ -38,6 +37,4 @@ jobs:
 
       - name: Integration tests
         run: docker-compose run web pytest -p no:cacheprovider integration_test
-
-
 {% endraw -%}
