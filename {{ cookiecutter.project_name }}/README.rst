@@ -32,9 +32,9 @@ Bumping package versions
 
 If you want to upgrade all package versions, use pip-compile:
 
-  $ docker compose run --rm web pip-compile requirements.in
-  $ docker compose run --rm web pip-compile requirements-dev.in
+  $ docker compose run --rm web pip-compile requirements/base.in
+  $ docker compose run --rm web pip-compile requirements/dev.in
 
 If you want to selectively upgrade a package version (e.g. fastapi):
 
-  $ docker compose run --rm web pip-compile -P fastapi requirements.in
+  $ docker compose run --rm web pip-compile -P fastapi requirements/base.in

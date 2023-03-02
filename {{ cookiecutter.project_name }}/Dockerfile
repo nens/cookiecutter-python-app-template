@@ -33,9 +33,9 @@ ARG uid=1000
 ARG gid=1000
 RUN groupadd -g $gid nens && useradd -lm -u $uid -g $gid nens
 
-COPY requirements.txt requirements-dev.txt /app/
+COPY requirements /app/
 RUN pip install -U pip pip-tools setuptools wheel --no-cache-dir
-RUN pip install --no-cache-dir -r /app/requirements.txt -r /app/requirements-dev.txt
+RUN pip install --no-cache-dir -r /app/requirements/base.txt -r /app/requirements/dev.txt
 
 WORKDIR /app
 USER nens:nens
