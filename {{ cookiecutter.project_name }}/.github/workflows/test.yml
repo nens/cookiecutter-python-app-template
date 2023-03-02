@@ -1,4 +1,4 @@
-{% raw -%}name: Linux
+{% raw -%}name: Test
 
 # Run on PR requests. And on master itself.
 on:
@@ -9,40 +9,35 @@ on:
 
 jobs:
   TestLinux:
-    name: Linux, Python ${{ matrix.python }}
+    name: Linux, Python
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          # 2019
-          - python: 3.8
-            pins: ""
-          # 2021
-          - python: 3.9
-            pins: ""
-          # 2022
-          - python: "3.10"
-            pins: ""
-          # current
-          - python: "3.11"
-            pins: ""
 
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up Python ${{ matrix.python }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python }}
-  
-      - name: Install python dependencies
-        run: |
-          pip install --disable-pip-version-check --upgrade pip setuptools
-          pip install -e .[test] ${{ matrix.pins }}
-          pip list
+      - name: Set up Docker Buildx
+        id: buildx        
+        uses: docker/setup-buildx-action@master
 
-      - name: Run tests
-        run: pytest --cov
+      - name: Build and push images
+        uses: docker/build-push-action@v4
+        with:
+          push: false
+          load: true
+          tags: {% endraw -%}{{ cookiecutter.package_name }}{% raw -%}/web:latest
+          file: ./Dockerfile
+          context: .
+          cache-from: type=gha
+          cache-to: type=gha,mode=min
+          
+      - name: Unittests
+        run: docker-compose run --no-deps web pytest -p no:cacheprovider src
+      
+      - name: Start databases
+        run: docker-compose up -d db
+
+      - name: Integration tests
+        run: docker-compose run web pytest -p no:cacheprovider integration_test
+
 
 {% endraw -%}

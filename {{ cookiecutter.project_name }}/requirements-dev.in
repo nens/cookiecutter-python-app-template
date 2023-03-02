@@ -1,0 +1,11 @@
+-c requirements.txt
+black
+debugpy
+flake8
+httpx
+ipython
+isort
+mypy
+pytest
+pytest-env
+pytest-faker

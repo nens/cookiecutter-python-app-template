@@ -27,12 +27,3 @@ class BasicTest(unittest.TestCase):
 
     def test_smoke(self):
         assert "my-project" in os.listdir()
-
-    def test_generated_project(self):
-        os.chdir("my-project")
-        # We have to pass a full string instead of clean splitted ([...])
-        # arguments as otherwise calling python from within our own python
-        # interferes too much.
-        subprocess.run("%s -m venv ." % sys.executable, shell=True, check=True)
-        subprocess.run("bin/pip install -e .[test]", shell=True, check=True)
-        subprocess.run("bin/pytest", shell=True, check=True)
