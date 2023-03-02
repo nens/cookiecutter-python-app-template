@@ -1,6 +1,6 @@
 [run]
 source = {{ cookiecutter.package_name }}
-omit = {{ cookiecutter.package_name }}/tests/*
+omit = test_*.py
 
 [report]
 show_missing = true
